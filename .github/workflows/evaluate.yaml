@@ -5,9 +5,11 @@ on:
       format:
         description: 'Run format checks'
         type: boolean
+        default: false
       test:
         description: 'Run unit and integration tests'
         type: boolean
+        default: true
       test-root:
         description: 'Root directory for tests'
         type: string
@@ -17,10 +19,12 @@ on:
       format:
         description: 'Run format checks'
         type: boolean
-        default: true
+        required: true
+        default: false
       test:
         description: 'Run unit and integration tests'
         type: boolean
+        required: true
         default: true
       test-root:
         description: 'Root directory for tests'
