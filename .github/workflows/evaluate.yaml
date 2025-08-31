@@ -77,7 +77,7 @@ jobs:
       - name: Run pytest
         continue-on-error: true
         run: |
-          python3 -m pytest --junit-xml "${{ env.PYTEST_RESULT_PATH }}"
+          python3 -m pytest --junit-xml "${{ env.PYTEST_RESULT_PATH }}" "${{ inputs.test-root }}"
 
       - name: Generate Summary
         if: ${{ !cancelled() }}
