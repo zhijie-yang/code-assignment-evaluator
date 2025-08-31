@@ -37,10 +37,10 @@ jobs:
     if: ${{ inputs.format }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
@@ -59,11 +59,17 @@ jobs:
     env:
       PYTEST_RESULT_PATH: pytest_results.xml
     steps:
+      - name: Checkout evaluator repository
+        uses: actions/checkout@v5
+        with:
+          repository: zhijie-yang/code-assignment-evaluator
+          path: evaluator
+
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
@@ -80,4 +86,4 @@ jobs:
       - name: Generate Summary
         if: ${{ !cancelled() }}
         run: |
-          python3 -m tools.junit_to_markdown --input-junit "${{ env.PYTEST_RESULT_PATH }}" >> $GITHUB_STEP_SUMMARY
+          python3 -m evaluator.tools.junit_to_markdown --input-junit "${{ env.PYTEST_RESULT_PATH }}" >> $GITHUB_STEP_SUMMARY
