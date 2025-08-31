@@ -59,14 +59,14 @@ jobs:
     env:
       PYTEST_RESULT_PATH: pytest_results.xml
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
       - name: Checkout evaluator repository
         uses: actions/checkout@v5
         with:
           repository: zhijie-yang/code-assignment-evaluator
           path: evaluator
-
-      - name: Checkout repository
-        uses: actions/checkout@v5
 
       - name: Set up Python
         uses: actions/setup-python@v5
