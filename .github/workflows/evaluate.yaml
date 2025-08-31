@@ -4,32 +4,26 @@ on:
     inputs:
       format:
         description: 'Run format checks'
-        required: true
         type: boolean
       test:
         description: 'Run unit and integration tests'
-        required: true
         type: boolean
       test-root:
         description: 'Root directory for tests'
-        required: false
         type: string
         default: './tests'
   workflow_dispatch:
     inputs:
       format:
         description: 'Run format checks'
-        required: true
         type: boolean
         default: true
       test:
         description: 'Run unit and integration tests'
-        required: true
         type: boolean
         default: true
       test-root:
         description: 'Root directory for tests'
-        required: false
         type: string
         default: './tests'
 
