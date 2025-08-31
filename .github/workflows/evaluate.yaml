@@ -1,0 +1,85 @@
+name: Evaluate
+on:
+  workflow_call:
+    inputs:
+      format:
+        description: 'Run format checks'
+        required: true
+        type: boolean
+      test:
+        description: 'Run unit and integration tests'
+        required: true
+        type: boolean
+      test-root:
+        description: 'Root directory for tests'
+        required: false
+        type: string
+        default: './tests'
+  workflow_dispatch:
+    inputs:
+      format:
+        description: 'Run format checks'
+        required: true
+        type: boolean
+        default: true
+      test:
+        description: 'Run unit and integration tests'
+        required: true
+        type: boolean
+        default: true
+      test-root:
+        description: 'Root directory for tests'
+        required: false
+        type: string
+        default: './tests'
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.format }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black
+
+      - name: Run black
+        run: |
+          black --check .
+
+  test:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.test }}
+    env:
+      PYTEST_RESULT_PATH: pytest_results.xml
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Run pytest
+        continue-on-error: true
+        run: |
+          python3 -m pytest --junit-xml "${{ env.PYTEST_RESULT_PATH }}"
+
+      - name: Generate Summary
+        if: ${{ !cancelled() }}
+        run: |
+          python3 -m tools.junit_to_markdown --input-junit "${{ env.PYTEST_RESULT_PATH }}" >> $GITHUB_STEP_SUMMARY
